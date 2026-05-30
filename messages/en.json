@@ -1,0 +1,45 @@
+{
+  "Navbar": {
+    "title": "Tabara3",
+    "donors": "Donors",
+    "donate": "Donate"
+  },
+  "Hero": {
+    "badge": "Every drop counts",
+    "heading": "Your blood can be someone's <span>second chance</span>",
+    "sub": "Join Tabara3 and become a hero. One donation can save up to three lives. Be the reason someone smiles today.",
+    "ctaDonate": "Donate Now",
+    "ctaView": "View Donors"
+  },
+  "DonorsPage": {
+    "title": "Blood Donors",
+    "heroes": "{count} heroes ready to save lives",
+    "empty": "No donors registered yet.",
+    "lastDonation": "Last donation: {date}",
+    "noDonations": "No donations yet"
+  },
+  "AddDonor": {
+    "pageTitle": "Become a Donor",
+    "pageDesc": "Register to save lives. Your donation matters.",
+    "cardTitle": "Personal Information",
+    "cardDesc": "Fill in your details to join our donor community.",
+    "name": "Full Name",
+    "namePlaceholder": "Ahmed Benali",
+    "bloodType": "Blood Type",
+    "bloodTypePlaceholder": "Select blood type",
+    "age": "Age",
+    "agePlaceholder": "25",
+    "phone": "Phone",
+    "phonePlaceholder": "+213 555 12 34 56",
+    "address": "Address",
+    "addressPlaceholder": "Alger Centre, Alger",
+    "lastDonation": "Last Donation Date",
+    "submit": "Register as Donor",
+    "submitting": "Registering...",
+    "successTitle": "Donor registered successfully!",
+    "successDesc": "Thank you for saving lives."
+  },
+  "Footer": {
+    "text": "© {year} Tabara3 — Every drop saves lives."
+  }
+}
