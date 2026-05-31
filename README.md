@@ -63,6 +63,14 @@ The `Donor` model stores: `id`, `name`, `bloodType` (enum), `age`, `phone`, `add
 | `npm run start`    | Start production   |
 | `npm run lint`     | ESLint             |
 
+## Status
+
+This project is **incomplete**. The following features are planned for future iterations if the project gains traction and expects multiple users:
+
+- **Update / Delete donors** — Edit and remove donor records.
+- **Authentication** — User accounts, roles, and session management.
+- **Admin dashboard** — Manage donors, view analytics, etc.
+
 ## License
 
 MIT

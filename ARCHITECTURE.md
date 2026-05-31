@@ -111,6 +111,16 @@ DonorsPage (server component)
   → render card grid
 ```
 
+
+## Current Status
+
+This is a **minimal viable foundation**. The app intentionally omits:
+
+- **Update / Delete** — No edit or removal of donor records yet.
+- **Authentication** — No user accounts; anyone can register a donor.
+
+These features will be added if the project scales and requires multi-user support, admin roles, or data ownership.
+
 ## Routes
 
 | Path         | Type     | Description              |
