@@ -25,7 +25,7 @@ model Donor {
   age          Int
   phone        String
   address      String
-  lastDonation DateTime  @map("last_donation") @db.Date
+  lastDonation DateTime? @map("last_donation") @db.Date
   createdAt    DateTime  @default(now()) @map("created_at")
 
   @@map("donors")

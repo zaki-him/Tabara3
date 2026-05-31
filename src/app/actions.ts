@@ -2,12 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import type { BloodType } from "@/lib/enums";
 import { BloodType as PrismaBloodType } from "@/generated/prisma/enums";
 
 export interface DonorFormData {
   name: string;
-  bloodType: BloodType;
+  bloodType: string;
   age: string;
   phone: string;
   address: string;
@@ -27,7 +26,7 @@ const bloodTypeToPrisma: Record<string, string> = {
 
 export async function createDonor(_prev: unknown, formData: FormData) {
   const name = formData.get("name") as string;
-  const bloodType = formData.get("bloodType") as BloodType;
+  const bloodType = formData.get("bloodType") as string;
   const age = formData.get("age") as string;
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
@@ -54,7 +53,7 @@ export async function createDonor(_prev: unknown, formData: FormData) {
       age: Number(age),
       phone: phone.trim(),
       address: address.trim(),
-      lastDonation: lastDonation ? new Date(lastDonation) : new Date(),
+      ...(lastDonation ? { lastDonation: new Date(lastDonation) } : {}),
     },
   });
 
