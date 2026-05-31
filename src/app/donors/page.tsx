@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { getDonors } from "@/lib/donors";
+import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropletIcon, MapPinIcon, PhoneIcon, CalendarIcon } from "lucide-react";
 
@@ -14,9 +14,22 @@ const bloodColorMap: Record<string, string> = {
   "O-": "bg-green-400/10 text-green-400",
 };
 
+const bloodTypeDisplay: Record<string, string> = {
+  A_PLUS: "A+",
+  A_MINUS: "A-",
+  B_PLUS: "B+",
+  B_MINUS: "B-",
+  AB_PLUS: "AB+",
+  AB_MINUS: "AB-",
+  O_PLUS: "O+",
+  O_MINUS: "O-",
+};
+
 export default async function DonorsPage() {
   const t = await getTranslations("DonorsPage");
-  const donors = getDonors();
+  const donors = await prisma.donor.findMany({
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -35,47 +48,50 @@ export default async function DonorsPage() {
         </div>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {donors.map((donor) => (
-            <Card
-              key={donor.id}
-              className="transition-all hover:border-primary/30 hover:shadow-md"
-            >
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">{donor.name}</CardTitle>
-                  <span
-                    className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold ${
-                      bloodColorMap[donor.bloodType] || "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {donor.bloodType}
-                  </span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPinIcon className="size-3.5 shrink-0" />
-                    <span>{donor.address}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <PhoneIcon className="size-3.5 shrink-0" />
-                    <span>{donor.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <CalendarIcon className="size-3.5 shrink-0" />
-                    <span>
-                      {donor.lastDonation
-                        ? t("lastDonation", {
-                            date: new Date(donor.lastDonation).toLocaleDateString(),
-                          })
-                        : t("noDonations")}
+          {donors.map((donor) => {
+            const displayBt = bloodTypeDisplay[donor.bloodType] || donor.bloodType;
+            return (
+              <Card
+                key={donor.id}
+                className="transition-all hover:border-primary/30 hover:shadow-md"
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base">{donor.name}</CardTitle>
+                    <span
+                      className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold ${
+                        bloodColorMap[displayBt] || "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {displayBt}
                     </span>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPinIcon className="size-3.5 shrink-0" />
+                      <span>{donor.address}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <PhoneIcon className="size-3.5 shrink-0" />
+                      <span>{donor.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <CalendarIcon className="size-3.5 shrink-0" />
+                      <span>
+                        {donor.lastDonation
+                          ? t("lastDonation", {
+                              date: new Date(donor.lastDonation).toLocaleDateString(),
+                            })
+                          : t("noDonations")}
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
     </div>

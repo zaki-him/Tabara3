@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { addDonor, type BloodType } from "@/lib/donors";
+import { prisma } from "@/lib/prisma";
+import type { BloodType } from "@/lib/enums";
+import { BloodType as PrismaBloodType } from "@/generated/prisma/enums";
 
 export interface DonorFormData {
   name: string;
@@ -11,6 +13,17 @@ export interface DonorFormData {
   address: string;
   lastDonation: string;
 }
+
+const bloodTypeToPrisma: Record<string, string> = {
+  "A+": PrismaBloodType.A_PLUS,
+  "A-": PrismaBloodType.A_MINUS,
+  "B+": PrismaBloodType.B_PLUS,
+  "B-": PrismaBloodType.B_MINUS,
+  "AB+": PrismaBloodType.AB_PLUS,
+  "AB-": PrismaBloodType.AB_MINUS,
+  "O+": PrismaBloodType.O_PLUS,
+  "O-": PrismaBloodType.O_MINUS,
+};
 
 export async function createDonor(_prev: unknown, formData: FormData) {
   const name = formData.get("name") as string;
@@ -34,13 +47,15 @@ export async function createDonor(_prev: unknown, formData: FormData) {
 
   if (Object.keys(errors).length > 0) return { errors };
 
-  addDonor({
-    name: name.trim(),
-    bloodType,
-    age: Number(age),
-    phone: phone.trim(),
-    address: address.trim(),
-    lastDonation,
+  await prisma.donor.create({
+    data: {
+      name: name.trim(),
+      bloodType: bloodTypeToPrisma[bloodType] as any,
+      age: Number(age),
+      phone: phone.trim(),
+      address: address.trim(),
+      lastDonation: lastDonation ? new Date(lastDonation) : new Date(),
+    },
   });
 
   revalidatePath("/donors");
