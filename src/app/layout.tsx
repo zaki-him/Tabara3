@@ -1,12 +1,69 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { Figtree, Noto_Sans_Arabic } from "next/font/google";
+import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { LocaleToggle } from "@/components/locale-toggle";
 import PageTransition from "@/components/page-transition";
 import Link from "next/link";
 import { DropletIcon, UsersIcon, HeartIcon } from "lucide-react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("Hero");
+
+  const siteName = locale === "ar" ? "تبرّع" : "Tabara3";
+  const description = t("sub");
+
+  return {
+    title: {
+      default: siteName,
+      template: `%s | ${siteName}`,
+    },
+    description,
+    keywords: [
+      "blood donation",
+      "تبرع بالدم",
+      "tabara3",
+      "تبرّع",
+      "donate blood",
+      "blood donor",
+      "save lives",
+      "التبرع بالدم",
+      "متبرع بالدم",
+    ],
+    authors: [{ name: "Tabara3" }],
+    creator: "Zakaria Himrane",
+    publisher: "Zakaria Himrane",
+    openGraph: {
+      type: "website",
+      locale: locale === "ar" ? "ar_DZ" : "en_US",
+      siteName,
+      title: siteName,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: siteName,
+      description,
+    },
+    icons: {
+      icon: "/icon.svg",
+      shortcut: "/icon.svg",
+      apple: "/icon.svg",
+    },
+    appleWebApp: {
+      title: siteName,
+      statusBarStyle: "black-translucent",
+    },
+    applicationName: siteName,
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 const figtree = Figtree({
   subsets: ["latin"],
